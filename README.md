@@ -46,10 +46,9 @@ npm start
 
 ### CI/CD Automático
 
-[![GitHub Actions](https://github.com/YOUR_USERNAME/vixseg-site/workflows/CI%2FCD%20Pipeline/badge.svg)](https://github.com/YOUR_USERNAME/vixseg-site/actions)
-[![GitLab CI/CD](https://gitlab.com/YOUR_USERNAME/vixseg-site/badges/main/pipeline.svg)](https://gitlab.com/YOUR_USERNAME/vixseg-site/-/pipelines)
+[![GitHub Actions](https://github.com/andrerds/vixseg-site/workflows/CI%2FCD%20Pipeline/badge.svg)](https://github.com/andrerds/vixseg-site/actions)
 
-O projeto utiliza CI/CD automatizado com GitHub Actions e GitLab CI/CD:
+O projeto utiliza CI/CD automatizado com GitHub Actions:
 
 - **Build automático** em cada push
 - **Deploy manual** para produção (main branch)
@@ -60,13 +59,10 @@ O projeto utiliza CI/CD automatizado com GitHub Actions e GitLab CI/CD:
 #### Deploy Rápido
 
 ```bash
-# Método 1: Via GitHub Actions
+# Método 1: Via GitHub Actions (Manual)
 # 1. Acesse Actions → CI/CD Pipeline → Run workflow
 
-# Método 2: Via GitLab CI/CD
-# 1. Acesse CI/CD → Pipelines → Play button no deploy job
-
-# Método 3: Via tag de versão
+# Método 2: Via tag de versão (Automático)
 git tag v1.0.0
 git push origin v1.0.0
 ```

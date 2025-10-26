@@ -1,6 +1,6 @@
 # CI/CD Setup Guide
 
-Quick reference guide for setting up CI/CD pipelines.
+Quick reference guide for setting up GitHub Actions CI/CD pipeline.
 
 ## Prerequisites Checklist
 
@@ -25,7 +25,7 @@ SERVER_USER = vixseg
 SERVER_PORT = 22
 ```
 
-### 2. Configure Environment (Optional)
+### 2. Configure Environment (Optional but Recommended)
 
 Go to: **Settings → Environments → New environment**
 
@@ -41,37 +41,6 @@ Go to: **Settings → Branches → Add branch protection rule**
 - ✅ Require pull request reviews before merging
 - ✅ Require status checks to pass before merging
 - ✅ Require branches to be up to date before merging
-
-## GitLab Setup
-
-### 1. Configure Variables
-
-Go to: **Settings → CI/CD → Variables**
-
-Add these variables:
-
-| Key               | Value                | Protected | Masked |
-| ----------------- | -------------------- | --------- | ------ |
-| `SSH_PRIVATE_KEY` | `<your-private-key>` | ✅        | ✅     |
-| `SERVER_HOST`     | `5.75.174.224`       | ✅        | ❌     |
-| `SERVER_USER`     | `vixseg`             | ✅        | ❌     |
-| `SERVER_PORT`     | `22`                 | ✅        | ❌     |
-
-### 2. Protect Main Branch
-
-Go to: **Settings → Repository → Protected branches**
-
-- Branch: `main`
-- Allowed to merge: Maintainers
-- Allowed to push: No one
-- Require approval: Yes
-
-### 3. Configure Protected Tags (Optional)
-
-Go to: **Settings → Repository → Protected tags**
-
-- Tag: `v*`
-- Allowed to create: Maintainers
 
 ## Server Setup
 
@@ -162,7 +131,7 @@ curl http://localhost:3105
 
 ## Testing CI/CD
 
-### Test Build (GitHub)
+### Test Build
 
 ```bash
 # Push to feature branch
@@ -172,32 +141,25 @@ git push origin test/ci-cd
 # Check Actions tab for build status
 ```
 
-### Test Build (GitLab)
+### Test Deployment
+
+1. Merge to main branch
+2. Go to **Actions → CI/CD Pipeline**
+3. Click **"Run workflow"**
+4. Select branch: `main`
+5. Click **"Run workflow"**
+6. Monitor deployment logs
+
+### Test with Version Tag
 
 ```bash
-# Push to feature branch
-git checkout -b test/ci-cd
-git push origin test/ci-cd
+# Create and push version tag
+git tag v1.0.0
+git push origin v1.0.0
 
-# Check CI/CD → Pipelines for build status
+# Deployment will start automatically
+# Check Actions tab
 ```
-
-### Test Deployment (GitHub)
-
-1. Merge to main branch
-2. Go to Actions → CI/CD Pipeline
-3. Click "Run workflow"
-4. Select branch: main
-5. Click "Run workflow"
-6. Monitor deployment
-
-### Test Deployment (GitLab)
-
-1. Merge to main branch
-2. Go to CI/CD → Pipelines
-3. Find main branch pipeline
-4. Click Play button on deploy job
-5. Monitor deployment
 
 ## Troubleshooting Setup
 
@@ -254,14 +216,40 @@ sudo chown -R vixseg:vixseg /home/vixseg/htdocs/vixseg.com.br
 chmod 755 /home/vixseg/htdocs/vixseg.com.br
 ```
 
+### GitHub Actions Workflow Not Running
+
+```bash
+# Check if workflow file exists
+ls -la .github/workflows/deploy.yml
+
+# Verify YAML syntax
+# Use online YAML validator or GitHub's workflow editor
+
+# Check Actions tab for errors
+# GitHub → Actions → Select workflow → View logs
+```
+
+### Secrets Not Working
+
+```bash
+# Verify secrets are configured
+# GitHub → Settings → Secrets and variables → Actions
+
+# Check secret names match exactly (case-sensitive):
+# - SSH_PRIVATE_KEY
+# - SERVER_HOST
+# - SERVER_USER
+# - SERVER_PORT
+```
+
 ## Security Checklist
 
 - [ ] SSH keys generated with strong algorithm (ED25519)
-- [ ] Private keys stored only in CI/CD secrets
+- [ ] Private keys stored only in GitHub Secrets
 - [ ] Public key added to server authorized_keys
 - [ ] Main branch protected
 - [ ] Deployment requires manual approval
-- [ ] Secrets marked as protected and masked
+- [ ] Secrets marked as repository secrets
 - [ ] Server firewall configured
 - [ ] PM2 logs rotation enabled
 - [ ] Regular backup schedule established
@@ -270,7 +258,7 @@ chmod 755 /home/vixseg/htdocs/vixseg.com.br
 ## Next Steps
 
 1. ✅ Complete server setup
-2. ✅ Configure CI/CD secrets
+2. ✅ Configure GitHub Secrets
 3. ✅ Protect main branch
 4. ✅ Test build pipeline
 5. ✅ Test deployment pipeline
@@ -280,11 +268,30 @@ chmod 755 /home/vixseg/htdocs/vixseg.com.br
 9. ✅ Train team on deployment process
 10. ✅ Schedule first key rotation
 
+## Quick Commands Reference
+
+```bash
+# Test deployment infrastructure
+bash scripts/test-deployment.sh
+
+# Test rollback procedures
+bash scripts/test-rollback.sh
+
+# Manual deployment (if needed)
+bash scripts/deploy.sh
+
+# Manual rollback (if needed)
+bash scripts/rollback.sh
+
+# Health check
+bash scripts/health-check.sh 5.75.174.224 3105
+```
+
 ## Support
 
 - **Full Documentation**: [DEPLOYMENT.md](../DEPLOYMENT.md)
 - **Secrets Guide**: [SECRETS.md](../SECRETS.md)
-- **Troubleshooting**: See DEPLOYMENT.md
+- **GitLab Setup**: [gitlab-optional/README.md](gitlab-optional/README.md) (optional)
 
 ---
 

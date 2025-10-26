@@ -1,0 +1,31 @@
+# Server Configuration Template
+
+⚠️ **DO NOT COMMIT THIS FILE WITH REAL DATA**
+
+Copy this file to `docs/doc.server.md` and fill with your actual credentials.
+The file `docs/doc.server.md` is ignored by git.
+
+## Production Server
+
+```
+host: your-server-ip-or-domain
+port: your-app-port (e.g., 3105)
+user: your-ssh-username
+```
+
+## SSH Access
+
+```
+# Test connection
+ssh your-username@your-server-ip
+
+# Deploy path
+/home/your-username/htdocs/your-domain
+```
+
+## Notes
+
+- Keep this information secure
+- Never commit real credentials to git
+- Use environment variables when possible
+- Rotate credentials regularly
