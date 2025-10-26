@@ -39,3 +39,19 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# pm2 logs
+logs/
+*.log
+pm2-*.log
+
+# deployment
+backups/
+*.backup
+
+# ssh keys (safety)
+*.pem
+*.key
+*_rsa
+*_ed25519
+deploy_key*

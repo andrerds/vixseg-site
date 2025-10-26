@@ -44,23 +44,49 @@ npm start
 
 ## 📦 Deploy
 
-### Vercel (Recomendado)
+### CI/CD Automático
+
+[![GitHub Actions](https://github.com/YOUR_USERNAME/vixseg-site/workflows/CI%2FCD%20Pipeline/badge.svg)](https://github.com/YOUR_USERNAME/vixseg-site/actions)
+[![GitLab CI/CD](https://gitlab.com/YOUR_USERNAME/vixseg-site/badges/main/pipeline.svg)](https://gitlab.com/YOUR_USERNAME/vixseg-site/-/pipelines)
+
+O projeto utiliza CI/CD automatizado com GitHub Actions e GitLab CI/CD:
+
+- **Build automático** em cada push
+- **Deploy manual** para produção (main branch)
+- **Deploy automático** com tags de versão (v*.*.\*)
+- **PM2** para gerenciamento de processos
+- **Rollback automático** em caso de falha
+
+#### Deploy Rápido
+
+```bash
+# Método 1: Via GitHub Actions
+# 1. Acesse Actions → CI/CD Pipeline → Run workflow
+
+# Método 2: Via GitLab CI/CD
+# 1. Acesse CI/CD → Pipelines → Play button no deploy job
+
+# Método 3: Via tag de versão
+git tag v1.0.0
+git push origin v1.0.0
+```
+
+📖 **Documentação completa**: [DEPLOYMENT.md](./DEPLOYMENT.md)
+
+🔐 **Configuração de secrets**: [SECRETS.md](./SECRETS.md)
+
+### Outras Opções de Deploy
+
+#### Vercel
 
 1. Faça push do código para GitHub
 2. Importe o projeto no Vercel
 3. Deploy automático!
 
-### Netlify
+#### Netlify
 
 1. Build command: `npm run build`
 2. Publish directory: `out`
-
-### Hospedagem Estática
-
-```bash
-npm run build
-# Upload da pasta 'out' para seu servidor
-```
 
 ## 🎨 Cores da Marca
 
