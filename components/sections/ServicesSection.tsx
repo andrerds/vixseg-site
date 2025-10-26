@@ -19,13 +19,14 @@ export const ServicesSection: React.FC = () => {
       { threshold: 0.1 }
     );
 
-    if (sectionRef.current) {
-      observer.observe(sectionRef.current);
+    const currentSection = sectionRef.current;
+    if (currentSection) {
+      observer.observe(currentSection);
     }
 
     return () => {
-      if (sectionRef.current) {
-        observer.unobserve(sectionRef.current);
+      if (currentSection) {
+        observer.unobserve(currentSection);
       }
     };
   }, []);
@@ -66,7 +67,9 @@ export const ServicesSection: React.FC = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {services.map((service, index) => {
             // Dynamically get the icon component from lucide-react
-            const IconComponent = (LucideIcons as any)[service.icon];
+            const IconComponent = (
+              LucideIcons as unknown as Record<string, LucideIcons.LucideIcon>
+            )[service.icon];
 
             return (
               <div

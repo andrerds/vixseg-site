@@ -35,13 +35,14 @@ export const ContactSection: React.FC = () => {
       { threshold: 0.1 }
     );
 
-    if (sectionRef.current) {
-      observer.observe(sectionRef.current);
+    const currentSection = sectionRef.current;
+    if (currentSection) {
+      observer.observe(currentSection);
     }
 
     return () => {
-      if (sectionRef.current) {
-        observer.unobserve(sectionRef.current);
+      if (currentSection) {
+        observer.unobserve(currentSection);
       }
     };
   }, []);
@@ -53,7 +54,9 @@ export const ContactSection: React.FC = () => {
       // Simulate API call
       await new Promise((resolve) => setTimeout(resolve, 2000));
 
-      console.log("Form data:", data);
+      // TODO: Implement actual form submission to backend
+      // await fetch('/api/contact', { method: 'POST', body: JSON.stringify(data) });
+      console.log("Form data:", data); // Will be used when API is implemented
 
       setSubmitSuccess(true);
       reset();
@@ -63,7 +66,10 @@ export const ContactSection: React.FC = () => {
         setSubmitSuccess(false);
       }, 5000);
     } catch (error) {
-      console.error("Error submitting form:", error);
+      // Log error for debugging in development
+      if (process.env.NODE_ENV === "development") {
+        console.error("Error submitting form:", error);
+      }
     } finally {
       setIsSubmitting(false);
     }
