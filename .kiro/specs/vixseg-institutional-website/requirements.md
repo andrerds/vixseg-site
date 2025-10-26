@@ -16,6 +16,7 @@ Este documento define os requisitos para o desenvolvimento do site institucional
 - **Unicorn.studio**: Ferramenta para criação de animações web interativas
 - **Grid Layout**: Sistema de layout baseado em grade para organização de elementos
 - **Favicon**: Ícone pequeno que representa o site na aba do navegador
+- **WhatsApp Button**: Botão flutuante fixo que abre conversa direta no WhatsApp
 
 ## Requirements
 
@@ -128,6 +129,18 @@ Este documento define os requisitos para o desenvolvimento do site institucional
 5. THE Website SHALL incluir ícones sociais para Facebook, Instagram e LinkedIn com links funcionais
 
 ### Requirement 10
+
+**User Story:** Como visitante do site em qualquer página, quero ter acesso rápido ao WhatsApp da empresa, para que eu possa iniciar uma conversa imediatamente sem precisar procurar o número de telefone.
+
+#### Acceptance Criteria
+
+1. THE Website SHALL exibir um botão flutuante do WhatsApp fixo no canto inferior direito da tela
+2. WHEN o usuário clica no botão WhatsApp, THE Website SHALL abrir conversa direta no WhatsApp Web ou aplicativo com o número "(27) 99973-9028"
+3. THE Website SHALL incluir mensagem pré-preenchida "Olá! Gostaria de solicitar um orçamento." ao abrir o WhatsApp
+4. THE Website SHALL manter o botão WhatsApp visível durante toda a navegação com z-index elevado
+5. THE Website SHALL aplicar animação de pulso suave no botão WhatsApp para chamar atenção
+
+### Requirement 11
 
 **User Story:** Como desenvolvedor mantendo o projeto, quero código modular e bem estruturado, para que eu possa fazer manutenções e atualizações facilmente.
 
