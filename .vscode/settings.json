@@ -1,0 +1,12 @@
+{
+  // remove not used
+  "editor.trimWhitespaceOnDelete": true,
+  "editor.autoIndent": "full",
+  "editor.fontFamily": "Cascadia Code",
+  "editor.formatOnSave": true,
+  "editor.codeActionsOnSave": {
+    "source.fixAll": "explicit",
+    "source.removeUnusedImports": "always"
+  },
+  "typescript.autoClosingTags": false
+}
