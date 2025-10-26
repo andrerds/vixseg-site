@@ -7,6 +7,5 @@
   "editor.codeActionsOnSave": {
     "source.fixAll": "explicit",
     "source.removeUnusedImports": "always"
-  },
-  "typescript.autoClosingTags": false
+  }
 }

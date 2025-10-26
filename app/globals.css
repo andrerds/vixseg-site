@@ -1,5 +1,4 @@
 @import "tailwindcss";
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap');
 
 :root {
   /* VixSeg Brand Colors - Extracted from favicon */
@@ -53,8 +52,8 @@
   --color-whatsapp: var(--color-whatsapp);
 
   /* Typography */
-  --font-heading: 'Poppins', system-ui, sans-serif;
-  --font-body: 'Inter', system-ui, sans-serif;
+  --font-heading: var(--font-poppins), system-ui, sans-serif;
+  --font-body: var(--font-inter), system-ui, sans-serif;
 
   /* Base */
   --color-background: var(--background);
@@ -106,8 +105,23 @@ h1, h2, h3, h4, h5, h6 {
   }
 }
 
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 .animate-pulse-subtle {
   animation: pulse-subtle 2s ease-in-out infinite;
+}
+
+.animate-fade-in {
+  animation: fade-in 1s ease-out forwards;
 }
 
 /* Reduced motion */
@@ -121,7 +135,8 @@ h1, h2, h3, h4, h5, h6 {
     scroll-behavior: auto !important;
   }
 
-  .animate-pulse-subtle {
+  .animate-pulse-subtle,
+  .animate-fade-in {
     animation: none;
   }
 }

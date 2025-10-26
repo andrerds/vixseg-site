@@ -1,36 +1,81 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# VixSeg Tecnologia - Site Institucional
 
-## Getting Started
+Site institucional moderno e responsivo para VixSeg Tecnologia, empresa especializada em segurança eletrônica.
 
-First, run the development server:
+## 🚀 Tecnologias
+
+- **Next.js 16** - Framework React com App Router
+- **React 19** - Biblioteca UI
+- **TypeScript 5** - Tipagem estática
+- **Tailwind CSS v4** - Estilização
+- **React Hook Form** - Gerenciamento de formulários
+- **Zod** - Validação de schemas
+- **Lucide React** - Ícones
+
+## 📋 Funcionalidades
+
+- ✅ Hero Section com vídeo background
+- ✅ Seção Sobre Nós com informações da empresa
+- ✅ Grid de Serviços com cards animados
+- ✅ Diferenciais competitivos
+- ✅ Formulário de contato com validação
+- ✅ Google Maps integrado
+- ✅ Botão WhatsApp flutuante
+- ✅ SEO otimizado
+- ✅ 100% responsivo
+- ✅ Acessibilidade WCAG AA
+- ✅ Animações elegantes
+
+## 🛠️ Instalação
 
 ```bash
+# Instalar dependências
+npm install
+
+# Rodar em desenvolvimento
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+
+# Build para produção
+npm run build
+
+# Rodar produção localmente
+npm start
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 📦 Deploy
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Vercel (Recomendado)
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+1. Faça push do código para GitHub
+2. Importe o projeto no Vercel
+3. Deploy automático!
 
-## Learn More
+### Netlify
 
-To learn more about Next.js, take a look at the following resources:
+1. Build command: `npm run build`
+2. Publish directory: `out`
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### Hospedagem Estática
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```bash
+npm run build
+# Upload da pasta 'out' para seu servidor
+```
 
-## Deploy on Vercel
+## 🎨 Cores da Marca
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- **Primária**: #00a859 (Verde tecnológico)
+- **Secundária**: #003d7a (Azul corporativo)
+- **Terciária**: #6b7280 (Cinza metálico)
+- **WhatsApp**: #25D366
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 📱 Contato
+
+- **Telefone**: (27) 3079-0014
+- **Plantão**: (27) 99973-9028
+- **E-mail**: contato@vixseg.com.br
+- **Endereço**: R. da Aldeia, 76 - Sala 04, Serra - ES
+
+## 📄 Licença
+
+© 2025 VixSeg Tecnologia. Todos os direitos reservados.
