@@ -1,0 +1,180 @@
+# GitLab CI/CD Pipeline for VixSeg Site
+# Skip CI if commit message contains [ci skip] or [skip ci]
+
+workflow:
+  rules:
+    - if: $CI_COMMIT_MESSAGE =~ /\[ci skip\]|\[skip ci\]/
+      when: never
+    - when: always
+
+stages:
+  - build
+  - deploy
+
+variables:
+  NODE_VERSION: "20"
+  DEPLOY_PATH: "/home/vixseg/htdocs/vixseg.com.br"
+  APP_PORT: "3105"
+
+# Build stage - runs on all branches
+build:
+  stage: build
+  image: node:${NODE_VERSION}
+
+  cache:
+    key:
+      files:
+        - package-lock.json
+    paths:
+      - node_modules/
+      - .next/cache/
+
+  script:
+    - echo "📦 Installing dependencies..."
+    - npm ci
+
+    - echo "🔍 Running ESLint..."
+    - npm run lint
+
+    - echo "🏗️ Building Next.js application..."
+    - npm run build
+
+    - echo "✅ Build completed successfully"
+
+  artifacts:
+    name: "build-$CI_COMMIT_SHORT_SHA"
+    paths:
+      - .next/
+      - public/
+      - package.json
+      - package-lock.json
+      - ecosystem.config.js
+    expire_in: 7 days
+
+  only:
+    - branches
+    - tags
+
+# Deploy stage - manual trigger on main branch or automatic on version tags
+deploy:
+  stage: deploy
+  image: alpine:latest
+
+  dependencies:
+    - build
+
+  before_script:
+    # Install required packages
+    - apk add --no-cache openssh-client rsync curl
+
+    # Setup SSH
+    - mkdir -p ~/.ssh
+    - chmod 700 ~/.ssh
+    - echo "$SSH_PRIVATE_KEY" > ~/.ssh/deploy_key
+    - chmod 600 ~/.ssh/deploy_key
+    - ssh-keyscan -H $SERVER_HOST >> ~/.ssh/known_hosts
+    - chmod 644 ~/.ssh/known_hosts
+
+  script:
+    - echo "🚀 Starting deployment to production..."
+    - echo "Deploying to $SERVER_USER@$SERVER_HOST:$DEPLOY_PATH"
+    - echo "Deployed by $GITLAB_USER_NAME ($GITLAB_USER_EMAIL)"
+    - echo "Commit $CI_COMMIT_SHORT_SHA on $CI_COMMIT_REF_NAME"
+
+    # Create backup on server
+    - |
+      ssh -i ~/.ssh/deploy_key -p $SERVER_PORT $SERVER_USER@$SERVER_HOST << 'ENDSSH'
+        mkdir -p $DEPLOY_PATH/backups
+        if [ -d $DEPLOY_PATH/.next ]; then
+          BACKUP_NAME=backup-$(date +%Y%m%d-%H%M%S)
+          mkdir -p $DEPLOY_PATH/backups/$BACKUP_NAME
+          cp -r $DEPLOY_PATH/.next $DEPLOY_PATH/backups/$BACKUP_NAME/
+          echo "📦 Backup created: $BACKUP_NAME"
+
+          # Keep only last 5 backups
+          cd $DEPLOY_PATH/backups
+          ls -t | tail -n +6 | xargs -r rm -rf
+        fi
+      ENDSSH
+
+    # Transfer files using rsync
+    - echo "📤 Transferring files..."
+    - |
+      rsync -avz --delete \
+        -e "ssh -i ~/.ssh/deploy_key -p $SERVER_PORT" \
+        .next/ $SERVER_USER@$SERVER_HOST:$DEPLOY_PATH/.next/
+
+    - |
+      rsync -avz \
+        -e "ssh -i ~/.ssh/deploy_key -p $SERVER_PORT" \
+        public/ $SERVER_USER@$SERVER_HOST:$DEPLOY_PATH/public/
+
+    - |
+      rsync -avz \
+        -e "ssh -i ~/.ssh/deploy_key -p $SERVER_PORT" \
+        package*.json ecosystem.config.js \
+        $SERVER_USER@$SERVER_HOST:$DEPLOY_PATH/
+
+    - echo "✅ Files transferred successfully"
+
+    # Install dependencies and reload PM2
+    - echo "📦 Installing production dependencies and reloading PM2..."
+    - |
+      ssh -i ~/.ssh/deploy_key -p $SERVER_PORT $SERVER_USER@$SERVER_HOST << 'ENDSSH'
+        cd $DEPLOY_PATH
+
+        echo "Installing dependencies..."
+        npm ci --production
+
+        echo "Reloading PM2..."
+        if pm2 describe vixseg-site > /dev/null 2>&1; then
+          pm2 reload ecosystem.config.js --update-env
+          echo "✅ PM2 reloaded successfully"
+        else
+          pm2 start ecosystem.config.js
+          pm2 save
+          echo "✅ PM2 started successfully"
+        fi
+
+        echo "📊 PM2 Status:"
+        pm2 status vixseg-site
+      ENDSSH
+
+    # Health check
+    - echo "🏥 Running health check..."
+    - sleep 5
+    - |
+      for i in 1 2 3 4 5; do
+        HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" http://$SERVER_HOST:$APP_PORT || echo "000")
+        if [ "$HTTP_CODE" = "200" ] || [ "$HTTP_CODE" = "301" ] || [ "$HTTP_CODE" = "302" ]; then
+          echo "✅ Health check passed! (HTTP $HTTP_CODE)"
+          exit 0
+        fi
+        echo "⏳ Attempt $i/5 failed (HTTP $HTTP_CODE), retrying in 5 seconds..."
+        sleep 5
+      done
+      echo "❌ Health check failed after 5 attempts"
+      exit 1
+
+  after_script:
+    - echo "## Deployment Summary"
+    - echo "- Environment production"
+    - echo "- Deployed by $GITLAB_USER_NAME"
+    - echo "- Commit $CI_COMMIT_SHA"
+    - echo "- Branch/Tag $CI_COMMIT_REF_NAME"
+    - echo "- Timestamp $(date -u +'%Y-%m-%d %H:%M:%S UTC')"
+
+  environment:
+    name: production
+    url: http://vixseg.com.br:3105
+
+  # Manual trigger for main branch, automatic for version tags
+  rules:
+    - if: $CI_COMMIT_BRANCH == "main"
+      when: manual
+    - if: $CI_COMMIT_TAG =~ /^v\d+\.\d+\.\d+$/
+      when: on_success
+
+  only:
+    - main
+    - tags
